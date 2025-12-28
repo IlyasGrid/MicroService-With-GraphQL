@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequestAccount {
 
+    private Long id;
     private String name;
     private String number;
     private String owner;

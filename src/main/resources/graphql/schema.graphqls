@@ -1,4 +1,4 @@
-type BankAccount {
+type ReceiveAccount {
     id: ID
     name: String
     number: String
@@ -6,16 +6,16 @@ type BankAccount {
 }
 
 type Query {
-    getAllAccounts: [BankAccount]
-    getAccountById(id: ID): BankAccount
+    getAllAccounts: [ReceiveAccount]
+    getAccountById(id: ID): ReceiveAccount
 }
 
 type Mutation {
     # Using an 'input' type for creation
-    addAccount(bankAccount: BankAccountInput): BankAccount
+    addAccount(bankAccount: RequestAccount): ReceiveAccount
 }
 
-input BankAccountInput {
+input RequestAccount {
     name: String
     number: String
     owner: String

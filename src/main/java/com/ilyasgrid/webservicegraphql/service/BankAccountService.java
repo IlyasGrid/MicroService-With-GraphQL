@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface BankAccountService {
 
-    Optional<RequestAccount> addAccount(RequestAccount requestAccount);
+    Optional<ReceiveAccount> addAccount(RequestAccount requestAccount);
 
     boolean deleteAccount(Long id);
 

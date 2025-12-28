@@ -10,10 +10,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
-@NoArgsConstructor
 public class BankAccountController {
 
-    private BankAccountService bankAccountService;
+    private final BankAccountService bankAccountService;
 
     public BankAccountController(BankAccountService bankAccountService) {
         this.bankAccountService = bankAccountService;
@@ -30,7 +29,7 @@ public class BankAccountController {
     }
 
     @PostMapping
-    public RequestAccount addAccount(@RequestBody RequestAccount requestAccount) {
+    public ReceiveAccount addAccount(@RequestBody RequestAccount requestAccount) {
         return bankAccountService.addAccount(requestAccount)
                 .orElseThrow(() -> new RuntimeException("Failed to save account"));
     }

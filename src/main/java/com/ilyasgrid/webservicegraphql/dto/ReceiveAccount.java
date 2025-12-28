@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class ReceiveAccount {
-
+    private Long id;
     private String name;
     private String number;
     private String owner;

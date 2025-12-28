@@ -4,6 +4,7 @@ import com.ilyasgrid.webservicegraphql.dto.ReceiveAccount;
 import com.ilyasgrid.webservicegraphql.dto.RequestAccount;
 import com.ilyasgrid.webservicegraphql.service.BankAccountService;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -14,19 +15,17 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/graphql")
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class BankAccountGraphQLController {
-    private BankAccountService bankAccountService;
+    private final BankAccountService bankAccountService;
 
-    public BankAccountGraphQLController(BankAccountService bankAccountService) {
-        this.bankAccountService = bankAccountService;
-    }
     @QueryMapping
     public List<ReceiveAccount> getAllAccounts() {
         return bankAccountService.getAllAccounts();
     }
+
     @MutationMapping
-    public RequestAccount addAccount(@Argument RequestAccount bankAccount) {
+    public ReceiveAccount addAccount(@Argument RequestAccount bankAccount) { // Return ReceiveAccount
         return bankAccountService.addAccount(bankAccount)
                 .orElseThrow(() -> new RuntimeException("Save failed"));
     }

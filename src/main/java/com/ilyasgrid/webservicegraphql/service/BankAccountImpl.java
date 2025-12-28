@@ -6,44 +6,66 @@ import com.ilyasgrid.webservicegraphql.dto.RequestAccount;
 import com.ilyasgrid.webservicegraphql.entity.BankAccount;
 import com.ilyasgrid.webservicegraphql.mapper.BankAccountMapper;
 import com.ilyasgrid.webservicegraphql.repository.BankAccountRepo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-public class BankAccountImpl implements BankAccountService{
+@Service
+public class BankAccountImpl implements BankAccountService {
 
 
     BankAccountRepo bankAccountRepo;
     BankAccountMapper bankAccountMapper;
+
     public BankAccountImpl(BankAccountRepo bankAccountRepo, BankAccountMapper bankAccountMapper) {
         this.bankAccountRepo = bankAccountRepo;
         this.bankAccountMapper = bankAccountMapper;
     }
 
     @Override
-    public Optional<RequestAccount> addAccount(RequestAccount requestAccount) {
+    public Optional<ReceiveAccount> addAccount(RequestAccount requestAccount) {
         BankAccount bankAccount = bankAccountMapper.toEntity(requestAccount);
         bankAccountRepo.save(bankAccount);
-        return Optional.ofNullable(requestAccount);
+        ReceiveAccount receiveAccount = bankAccountMapper.toDto(bankAccount);
+        return Optional.ofNullable(receiveAccount);
     }
 
     @Override
     public boolean deleteAccount(Long id) {
+        if (bankAccountRepo.existsById(id)) {
+            bankAccountRepo.deleteById(id);
+            return true;
+        }
         return false;
     }
 
     @Override
     public ReceiveAccount updateAccount(Long id, RequestAccount requestAccount) {
+        Optional<BankAccount> bankAccountOptional = bankAccountRepo.findById(id);
+        if (bankAccountOptional.isPresent()) {
+            BankAccount bankAccount = bankAccountOptional.get();
+            bankAccount.setName(requestAccount.getName());
+            bankAccount.setNumber(requestAccount.getNumber());
+            bankAccount.setOwner(requestAccount.getOwner());
+            bankAccountRepo.save(bankAccount);
+            return bankAccountMapper.toDto(bankAccount);
+        }
         return null;
     }
 
     @Override
     public List<ReceiveAccount> getAllAccounts() {
-        return List.of();
+        return bankAccountRepo.findAll()
+                .stream()
+                .map(bankAccountMapper::toDto)
+                .toList();
     }
 
     @Override
     public ReceiveAccount getAccountById(Long id) {
-        return null;
+        return bankAccountRepo.findById(id)
+                .map(bankAccountMapper::toDto)
+                .orElse(null);
     }
 }
