@@ -1,0 +1,22 @@
+type BankAccount {
+    id: ID
+    name: String
+    number: String
+    owner: String
+}
+
+type Query {
+    getAllAccounts: [BankAccount]
+    getAccountById(id: ID): BankAccount
+}
+
+type Mutation {
+    # Using an 'input' type for creation
+    addAccount(bankAccount: BankAccountInput): BankAccount
+}
+
+input BankAccountInput {
+    name: String
+    number: String
+    owner: String
+}
